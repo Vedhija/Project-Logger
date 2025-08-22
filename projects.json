@@ -1,0 +1,12 @@
+[
+    {
+        "name": "Task Manager",
+        "tech": [
+            "HTML",
+            "CSS",
+            "JS"
+        ],
+        "notes": "Learnt FrontEnd basics",
+        "date_added": "2025-08-22 18:27"
+    }
+]
