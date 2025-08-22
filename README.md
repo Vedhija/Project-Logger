@@ -53,3 +53,8 @@ A simple command-line tool to log, track, and recall your coding projects.
    - Tech: Python
    - Notes: Check readme
    - Added: 2025-08-22 23:02
+
+11. **DemoProj**
+   - Tech: Python
+   - Notes: Testing push
+   - Added: 2025-08-22 23:35

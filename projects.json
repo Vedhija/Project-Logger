@@ -88,5 +88,13 @@
         ],
         "notes": "Check readme",
         "date_added": "2025-08-22 23:02"
+    },
+    {
+        "name": "DemoProj",
+        "tech": [
+            "Python"
+        ],
+        "notes": "Testing push",
+        "date_added": "2025-08-22 23:35"
     }
 ]
