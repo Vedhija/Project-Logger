@@ -1,12 +1,33 @@
 [
     {
-        "name": "Task Manager",
+        "name": "Portfolio",
+        "tech": [
+            "HTML",
+            "CSS",
+            "JS",
+            "React"
+        ],
+        "notes": "Added React to frontend",
+        "date_added": "2025-08-22 20:50"
+    },
+    {
+        "name": "Portfolio",
         "tech": [
             "HTML",
             "CSS",
             "JS"
         ],
-        "notes": "Learnt FrontEnd basics",
-        "date_added": "2025-08-22 18:27"
+        "notes": "My first frontend site",
+        "date_added": "2025-08-22 20:54"
+    },
+    {
+        "name": "Portfolio",
+        "tech": [
+            "HTML",
+            "CSS",
+            "JS"
+        ],
+        "notes": "My first frontend site",
+        "date_added": "2025-08-22 21:27"
     }
 ]
