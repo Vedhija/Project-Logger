@@ -38,7 +38,6 @@ def add_project(name, tech, notes):
     }
     projects.append(project)
     save_projects(projects)
-    update_readme()
     print(f"✅ Project '{name}' added!")
 
 def list_projects():
@@ -58,7 +57,7 @@ def list_projects():
         table.add_row(str(i), project["name"], ", ".join(project["tech"]), project["notes"], project["date_added"])
 
     console.print(table)
-    update_readme()
+    
 
 def search_projects(name=None, tech=None):
     projects = load_projects()
@@ -84,7 +83,6 @@ def update_project(name, tech=None, notes=None):
             if notes:
                 p["notes"] = notes
             save_projects(projects)
-            update_readme()
             print(f"✏️ Project '{name}' updated!")
             return
     print("⚠️ Project not found.")
@@ -110,7 +108,6 @@ def delete_project():
     deleted_count = before_count - len(projects)
 
     save_projects(projects)
-    update_readme()
     print(f"🗑️ Deleted {deleted_count} project(s): {', '.join(names)}")
 
 
@@ -132,20 +129,6 @@ def export_projects_csv():
             writer.writerow([p["name"], ", ".join(p["tech"]), p["notes"], p["date_added"]])
     print("📊 Exported to projects.csv")
 
-# -------------------- README Auto Update --------------------
-def update_readme():
-    projects = load_projects()
-    readme_file = "README.md"
-
-    
-
-    with open(readme_file, "w", encoding="utf-8") as f:
-        f.write(header)
-        if not projects:
-            f.write("(No projects logged yet)\n")
-        else:
-            for p in projects:
-                f.write(f"- **{p['name']}** ({', '.join(p['tech'])}) → {p['notes']} [{p['date_added']}]\n")
 
 # -------------------- Interactive Menu --------------------
 def menu():

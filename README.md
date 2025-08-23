@@ -6,7 +6,7 @@
 
 ## 📌 Overview  
 **Project Logger** is a simple yet powerful tool to log, search, update, and manage your projects.  
-It auto-updates your `README.md` with a live project list, supports interactive menus, backups, and export features.  
+It auto-updates your `projects.json` with a live project list, supports interactive menus, backups, and export features.  
 Perfect for students, developers, and anyone who wants to **track projects neatly in one place**.  
 
 
