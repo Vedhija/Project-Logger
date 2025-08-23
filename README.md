@@ -50,3 +50,10 @@ I would ❤️ contributions! Feel free to open issues and pull requests.
 
 #✨ Example Usage
 python main.py
+
+## 📸 Demo Screenshot
+![Project Logger Demo] - Terminal Output
+https://ibb.co/Fdt0f9v  or (./images/menu.png)
+https://ibb.co/VWgpQzm6    (./images/add.png)
+https://ibb.co/99fgkCFz    (./images/delete and list.png)
+
