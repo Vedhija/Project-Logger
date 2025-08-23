@@ -1,63 +1,10 @@
 [
     {
-        "name": "Chat Application",
+        "name": "",
         "tech": [
-            "Node.js",
-            "MongoDB",
-            "Socket.io",
-            "HTMl",
-            "CSS",
-            "JS"
-        ],
-        "notes": "A real-time chat application built with Node.js, MongoDB, and Socket.io. It enables instant messaging between users with WebSockets for seamless communication. Messages are stored in a MongoDB database, ensuring persistence.",
-        "date_added": "2025-08-23 13:39"
-    },
-    {
-        "name": "Chat Application",
-        "tech": [
-            "Node.js",
-            "MongoDB",
-            "and Socket.io",
-            "HTML",
-            "CSS",
-            "JS"
-        ],
-        "notes": "A real-time chat application built with Node.js, MongoDB, and Socket.io. It enables instant messaging between users with WebSockets for seamless communication. Messages are stored in a MongoDB database, ensuring persistence.",
-        "date_added": "2025-08-23 13:42"
-    },
-    {
-        "name": ".,",
-        "tech": [
-            ".",
-            "/"
-        ],
-        "notes": "jjj",
-        "date_added": "2025-08-23 13:45"
-    },
-    {
-        "name": ",,",
-        "tech": [
-            "",
-            "",
             ""
         ],
-        "notes": ",,",
-        "date_added": "2025-08-23 13:45"
-    },
-    {
-        "name": "T",
-        "tech": [
-            "i"
-        ],
-        "notes": "i",
-        "date_added": "2025-08-23 13:53"
-    },
-    {
-        "name": "m",
-        "tech": [
-            "m"
-        ],
-        "notes": "m",
-        "date_added": "2025-08-23 13:56"
+        "notes": "",
+        "date_added": "2025-08-23 15:48"
     }
 ]

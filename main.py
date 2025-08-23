@@ -6,7 +6,12 @@ from rich.console import Console
 from rich.table import Table
 
 console = Console()
-DATA_FILE = "projects.json"
+
+# Always save/load projects.json from the script's directory
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), "projects.json"))
+print(f"📂 Using projects.json at: {DATA_FILE}")
+
 
 # -------------------- Core Functions --------------------
 def load_projects():
@@ -18,9 +23,16 @@ def load_projects():
         except json.JSONDecodeError:
             return []
 
+# def save_projects(projects):
+#     with open(DATA_FILE, "w", encoding="utf-8") as f:
+#         json.dump(projects, f, indent=4)
+#     print(f"💾 Saved {len(projects)} project(s) to {DATA_FILE}")
 def save_projects(projects):
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(projects, f, indent=4)
+    print(f"💾 Saved {len(projects)} project(s) to {DATA_FILE}")
+    print(f"📂 Verify by opening this file manually: {DATA_FILE}")
+
 
 def backup_projects():
     if os.path.exists(DATA_FILE):
@@ -105,9 +117,8 @@ def delete_project():
 
     before_count = len(projects)
     projects = [p for p in projects if p["name"] not in names]
-    deleted_count = before_count - len(projects)
-
     save_projects(projects)
+    deleted_count = before_count - len(projects)
     print(f"🗑️ Deleted {deleted_count} project(s): {', '.join(names)}")
 
 
@@ -189,3 +200,5 @@ def menu():
 # -------------------- Entry Point --------------------
 if __name__ == "__main__":
     menu()
+
+
