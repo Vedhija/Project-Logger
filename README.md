@@ -34,7 +34,7 @@ pip install -r requirements.txt
 
 
 #📜 License & Contributions
-I would ❤️ contributions! Feel free to open issues and pull requests. </p>
+I would ❤️ contributions! Feel free to open issues and pull requests. 
 
 #✨ Example Usage
 from logger import Logger
