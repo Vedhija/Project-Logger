@@ -137,19 +137,7 @@ def update_readme():
     projects = load_projects()
     readme_file = "README.md"
 
-    header = """# Project Logger 📒
-
-A simple CLI tool to log, search, and manage projects.      
-
-## Features
-- Add projects with name, tech stack, and notes
-- Search by project name or technology
-- Update and delete projects
-- Export project list to CSV or Markdown
-- Auto-update README with project list      
-
-## Project List
-"""
+    
 
     with open(readme_file, "w", encoding="utf-8") as f:
         f.write(header)
