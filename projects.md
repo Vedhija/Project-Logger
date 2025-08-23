@@ -1,12 +1,15 @@
-# 📂 Project Log
+# 📦 Exported Projects
 
-## 1. Portfolio
-- **Tech:** HTML, CSS, JS, React
-- **Notes:** Added React to frontend
-- **Added:** 2025-08-22 20:50
-
-## 2. Portfolio
-- **Tech:** HTML, CSS, JS
-- **Notes:** My first frontend site
-- **Added:** 2025-08-22 20:54
-
+- **Portfolio** (HTML, CSS, JS, React) → Added React to frontend [2025-08-22 20:50]
+- **Portfolio** (HTML, CSS, JS) → My first frontend site [2025-08-22 20:54]
+- **Portfolio** (HTML, CSS, JS) → My first frontend site [2025-08-22 21:27]
+- **Chat App** (HTML, CSS, JS) → My first frontend site [2025-08-22 21:48]
+- **MyProject** (HTML, CSS) → Testing readme update [2025-08-22 22:03]
+- **DemoProj** (Python) → Check readme [2025-08-22 22:07]
+- **Dem** (Python) → Check readme [2025-08-22 22:11]
+- **Dem** (Python) → Check readme [2025-08-22 22:12]
+- **Demo** (Python) → Check readme [2025-08-22 22:17]
+- **DemoProj** (Python) → Check readme [2025-08-22 23:02]
+- **DemoProj** (Python) → Testing push [2025-08-22 23:35]
+- **Chat App** (Html, css, js) → blah blah [2025-08-23 10:31]
+- **Ticket System** (python) → noes [2025-08-23 10:34]

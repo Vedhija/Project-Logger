@@ -1,185 +1,220 @@
-import argparse
+import os
 import json
 from datetime import datetime
-import os
-import csv
+import questionary
+from rich.console import Console
+from rich.table import Table
 
+console = Console()
 DATA_FILE = "projects.json"
 
+# -------------------- Core Functions --------------------
 def load_projects():
     if not os.path.exists(DATA_FILE):
         return []
-    with open(DATA_FILE, "r") as f:
+    with open(DATA_FILE, "r", encoding="utf-8") as f:
         try:
             return json.load(f)
         except json.JSONDecodeError:
             return []
 
 def save_projects(projects):
-    with open(DATA_FILE, "w") as f:
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(projects, f, indent=4)
+
+def backup_projects():
+    if os.path.exists(DATA_FILE):
+        backup_name = f"backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        os.rename(DATA_FILE, backup_name)
+        print(f"🔒 Backup created: {backup_name}")
 
 def add_project(name, tech, notes):
     projects = load_projects()
     project = {
         "name": name,
-        "tech": [t.strip() for t in tech.split(",")],  # store as list
+        "tech": [t.strip() for t in tech.split(",")],
         "notes": notes,
         "date_added": datetime.now().strftime("%Y-%m-%d %H:%M")
     }
     projects.append(project)
     save_projects(projects)
+    update_readme()
     print(f"✅ Project '{name}' added!")
 
 def list_projects():
     projects = load_projects()
     if not projects:
-        print("⚠️ No projects found.")
+        console.print("[red]⚠️ No projects found![/red]")
         return
-    for idx, project in enumerate(projects, 1):
-        print(f"\n{idx}. {project['name']}")
-        print(f"   Tech: {', '.join(project['tech'])}")
-        print(f"   Notes: {project['notes']}")
-        print(f"   Added: {project['date_added']}")
+
+    table = Table(title="🚀 Your Projects")
+    table.add_column("No.", justify="right", style="cyan")
+    table.add_column("Name", style="bold green")
+    table.add_column("Tech", style="magenta")
+    table.add_column("Notes", style="yellow")
+    table.add_column("Added", style="blue")
+
+    for i, project in enumerate(projects, start=1):
+        table.add_row(str(i), project["name"], ", ".join(project["tech"]), project["notes"], project["date_added"])
+
+    console.print(table)
+    update_readme()
 
 def search_projects(name=None, tech=None):
     projects = load_projects()
     results = []
-
-    for project in projects:
-        if name and name.lower() in project["name"].lower():
-            results.append(project)
-        elif tech:
-            if any(tech.lower() in t.lower() for t in project["tech"]):
-                results.append(project)
+    for p in projects:
+        if name and name.lower() in p["name"].lower():
+            results.append(p)
+        elif tech and any(tech.lower() in t.lower() for t in p["tech"]):
+            results.append(p)
 
     if results:
-        print(f"🔍 Found {len(results)} project(s):")
-        for i, project in enumerate(results, start=1):
-            print(f"\n{i}. {project['name']}")
-            print(f"   Tech: {', '.join(project['tech'])}")
-            print(f"   Notes: {project['notes']}")
-            print(f"   Added: {project['date_added']}")
+        for p in results:
+            console.print(f"[green]{p['name']}[/green] - {', '.join(p['tech'])} - {p['notes']}")
     else:
-        print("❌ No projects found matching your search.")
+        console.print("[red]No matching projects found![/red]")
 
-# 🔹 Update project
 def update_project(name, tech=None, notes=None):
     projects = load_projects()
-    updated = False
-
-    for project in projects:
-        if project["name"].lower() == name.lower():
+    for p in projects:
+        if p["name"].lower() == name.lower():
             if tech:
-                project["tech"] = [t.strip() for t in tech.split(",")]
+                p["tech"] = [t.strip() for t in tech.split(",")]
             if notes:
-                project["notes"] = notes
-            updated = True
-            break
+                p["notes"] = notes
+            save_projects(projects)
+            update_readme()
+            print(f"✏️ Project '{name}' updated!")
+            return
+    print("⚠️ Project not found.")
 
-    if updated:
-        save_projects(projects)
-        print(f"✅ Project '{name}' updated successfully!")
-    else:
-        print(f"❌ No project found with name '{name}'.")
-
-def delete_project(name):
+def delete_project():
     projects = load_projects()
-    new_projects = [p for p in projects if p["name"].lower() != name.lower()]
+    if not projects:
+        print("⚠️ No projects to delete.")
+        return
 
-    if len(new_projects) == len(projects):
-        print(f"❌ No project found with name '{name}'.")
-    else:
-        save_projects(new_projects)
-        print(f"🗑️ Project '{name}' deleted successfully!")
+    # Show multi-select checklist with project names
+    names = questionary.checkbox(
+        "Select project(s) to delete:",
+        choices=[p["name"] for p in projects]
+    ).ask()
+
+    if not names:  # user pressed enter without selecting
+        print("⚠️ No projects selected.")
+        return
+
+    before_count = len(projects)
+    projects = [p for p in projects if p["name"] not in names]
+    deleted_count = before_count - len(projects)
+
+    save_projects(projects)
+    update_readme()
+    print(f"🗑️ Deleted {deleted_count} project(s): {', '.join(names)}")
+
 
 def export_projects():
     projects = load_projects()
-    if not projects:
-        print("⚠️ No projects to export.")
-        return
-
     with open("projects.md", "w", encoding="utf-8") as f:
-        f.write("# 📂 Project Log\n\n")
-        for idx, project in enumerate(projects, start=1):
-            f.write(f"## {idx}. {project['name']}\n")
-            f.write(f"- **Tech:** {', '.join(project['tech'])}\n")
-            f.write(f"- **Notes:** {project['notes']}\n")
-            f.write(f"- **Added:** {project['date_added']}\n\n")
-
-    print("✅ Projects exported to projects.md")
-
+        f.write("# 📦 Exported Projects\n\n")
+        for p in projects:
+            f.write(f"- **{p['name']}** ({', '.join(p['tech'])}) → {p['notes']} [{p['date_added']}]\n")
+    print("📄 Exported to projects.md")
 
 def export_projects_csv():
+    import csv
     projects = load_projects()
-    if not projects:
-        print("⚠️ No projects to export.")
-        return
-
     with open("projects.csv", "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(["Name", "Technologies", "Notes", "Date Added"])
-        for project in projects:
-            writer.writerow([
-                project["name"],
-                ", ".join(project["tech"]),
-                project["notes"],
-                project["date_added"]
-            ])
+        writer.writerow(["Name", "Tech", "Notes", "Date Added"])
+        for p in projects:
+            writer.writerow([p["name"], ", ".join(p["tech"]), p["notes"], p["date_added"]])
+    print("📊 Exported to projects.csv")
 
-    print("✅ Projects exported to projects.csv")
+# -------------------- README Auto Update --------------------
+def update_readme():
+    projects = load_projects()
+    readme_file = "README.md"
 
-def main():
-    parser = argparse.ArgumentParser(description="Project Logger CLI")
-    subparsers = parser.add_subparsers(dest="command")
+    header = """# Project Logger 📒
 
-    # Add project
-    add_parser = subparsers.add_parser("add", help="Add a new project")
-    add_parser.add_argument("name", help="Project name")
-    add_parser.add_argument("--tech", required=True, help="Technologies used (comma separated)")
-    add_parser.add_argument("--notes", required=True, help="Notes or insights")
+A simple CLI tool to log, search, and manage projects.      
 
-    # List projects
-    subparsers.add_parser("list", help="List all projects")
-    # Export projects
-    subparsers.add_parser("export", help="Export projects to Markdown file")
-    # Export CSV
-    subparsers.add_parser("export-csv", help="Export projects to CSV file")
+## Features
+- Add projects with name, tech stack, and notes
+- Search by project name or technology
+- Update and delete projects
+- Export project list to CSV or Markdown
+- Auto-update README with project list      
 
-    # Search projects
-    search_parser = subparsers.add_parser("search", help="Search projects")
-    search_parser.add_argument("--name", help="Search by project name")
-    search_parser.add_argument("--tech", help="Search by technology")
+## Project List
+"""
 
-    # 🔹 Update projects
-    update_parser = subparsers.add_parser("update", help="Update an existing project")
-    update_parser.add_argument("--name", required=True, help="Project name to update")
-    update_parser.add_argument("--tech", help="Updated technologies (comma separated)")
-    update_parser.add_argument("--notes", help="Updated notes")
+    with open(readme_file, "w", encoding="utf-8") as f:
+        f.write(header)
+        if not projects:
+            f.write("(No projects logged yet)\n")
+        else:
+            for p in projects:
+                f.write(f"- **{p['name']}** ({', '.join(p['tech'])}) → {p['notes']} [{p['date_added']}]\n")
 
-    # Delete project
-    delete_parser = subparsers.add_parser("delete", help="Delete a project")
-    delete_parser.add_argument("--name", required=True, help="Project name to delete")
+# -------------------- Interactive Menu --------------------
+def menu():
+    while True:
+        choice = questionary.select(
+            "Choose an action:",
+            choices=[
+                "Add Project",
+                "List Projects",
+                "Search Projects",
+                "Update Project",
+                "Delete Project",
+                "Export to Markdown",
+                "Export to CSV",
+                "Exit"
+            ]
+        ).ask()
 
-    args = parser.parse_args()
+        if choice == "Add Project":
+            name = questionary.text("Project name:").ask()
+            tech = questionary.text("Technologies (comma separated):").ask()
+            notes = questionary.text("Notes:").ask()
+            add_project(name, tech, notes)
 
-    if args.command == "add":
-        add_project(args.name, args.tech, args.notes)
-    elif args.command == "list":
-        list_projects()
-    elif args.command == "search":
-        search_projects(name=args.name, tech=args.tech)
-    elif args.command == "update":
-        update_project(name=args.name, tech=args.tech, notes=args.notes)
-    elif args.command == "delete":
-        delete_project(name=args.name)
-    elif args.command == "export":
-        export_projects()
-    elif args.command == "export-csv":
-        export_projects_csv()
+        elif choice == "List Projects":
+            list_projects()
 
-    else:
-        parser.print_help()
+        elif choice == "Search Projects":
+            search_by = questionary.select("Search by:", choices=["Name", "Tech"]).ask()
+            if search_by == "Name":
+                name = questionary.text("Enter project name:").ask()
+                search_projects(name=name)
+            else:
+                tech = questionary.text("Enter technology:").ask()
+                search_projects(tech=tech)
 
+        elif choice == "Update Project":
+            name = questionary.text("Project name to update:").ask()
+            tech = questionary.text("New technologies (leave blank to skip):").ask()
+            notes = questionary.text("New notes (leave blank to skip):").ask()
+            update_project(name, tech if tech else None, notes if notes else None)
+
+        elif choice == "Delete Project":
+            delete_project()
+
+
+
+        elif choice == "Export to Markdown":
+            export_projects()
+
+        elif choice == "Export to CSV":
+            export_projects_csv()
+
+        elif choice == "Exit":
+            print("👋 Goodbye!")
+            break
+
+# -------------------- Entry Point --------------------
 if __name__ == "__main__":
-    main()
+    menu()
