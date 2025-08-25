@@ -1,7 +1,6 @@
 # 📒 Project Logger  
 
-[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)  
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)  
+[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)   
 [![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-orange.svg)](https://github.com/Vedhija/Project-Logger/issues)  
 
 ## 📌 Overview  
